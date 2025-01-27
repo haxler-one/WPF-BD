@@ -1,0 +1,405 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище ShoppingCenterModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="МАГАЗИН">
+          <Key>
+            <PropertyRef Name="ИдентификаторМагазина" />
+          </Key>
+          <Property Name="ИдентификаторМагазина" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="НазваниеМагазина" Type="varchar" MaxLength="255" />
+          <Property Name="КатегорияМагазина" Type="varchar" MaxLength="255" />
+          <Property Name="Местоположение" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="ПОКУПАТЕЛЬ">
+          <Key>
+            <PropertyRef Name="ИдентификаторПокупателя" />
+          </Key>
+          <Property Name="ИдентификаторПокупателя" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Имя" Type="varchar" MaxLength="255" />
+          <Property Name="Фамилия" Type="varchar" MaxLength="255" />
+          <Property Name="ЭлектроннаяПочта" Type="varchar" MaxLength="255" />
+          <Property Name="Телефон" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="ПРОДАЖА">
+          <Key>
+            <PropertyRef Name="ИдентификаторПродажи" />
+          </Key>
+          <Property Name="ИдентификаторПродажи" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ИдентификаторПокупателя" Type="int" />
+          <Property Name="ДатаПродажи" Type="date" />
+          <Property Name="ОбщаяСумма" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <EntityType Name="ПРОДУКТ">
+          <Key>
+            <PropertyRef Name="ИдентификаторПродукта" />
+          </Key>
+          <Property Name="ИдентификаторПродукта" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="НазваниеПродукта" Type="varchar" MaxLength="255" />
+          <Property Name="Цена" Type="decimal" Precision="10" Scale="2" />
+          <Property Name="ИдентификаторМагазина" Type="int" />
+        </EntityType>
+        <EntityType Name="СОТРУДНИК">
+          <Key>
+            <PropertyRef Name="ИдентификаторСотрудника" />
+          </Key>
+          <Property Name="ИдентификаторСотрудника" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Имя" Type="varchar" MaxLength="255" />
+          <Property Name="Фамилия" Type="varchar" MaxLength="255" />
+          <Property Name="ИдентификаторМагазина" Type="int" />
+          <Property Name="Должность" Type="varchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="ЭЛЕМЕНТ_ПРОДАЖИ">
+          <Key>
+            <PropertyRef Name="ИдентификаторЭлементаПродажи" />
+          </Key>
+          <Property Name="ИдентификаторЭлементаПродажи" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ИдентификаторПродажи" Type="int" />
+          <Property Name="ИдентификаторПродукта" Type="int" />
+          <Property Name="Количество" Type="int" />
+          <Property Name="СуммаПозиции" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <Association Name="FK__ПРОДАЖА__Идентиф__412EB0B6">
+          <End Role="ПОКУПАТЕЛЬ" Type="Self.ПОКУПАТЕЛЬ" Multiplicity="0..1" />
+          <End Role="ПРОДАЖА" Type="Self.ПРОДАЖА" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ПОКУПАТЕЛЬ">
+              <PropertyRef Name="ИдентификаторПокупателя" />
+            </Principal>
+            <Dependent Role="ПРОДАЖА">
+              <PropertyRef Name="ИдентификаторПокупателя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ПРОДУКТ__Идентиф__3E52440B">
+          <End Role="МАГАЗИН" Type="Self.МАГАЗИН" Multiplicity="0..1" />
+          <End Role="ПРОДУКТ" Type="Self.ПРОДУКТ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="МАГАЗИН">
+              <PropertyRef Name="ИдентификаторМагазина" />
+            </Principal>
+            <Dependent Role="ПРОДУКТ">
+              <PropertyRef Name="ИдентификаторМагазина" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__СОТРУДНИК__Идент__3B75D760">
+          <End Role="МАГАЗИН" Type="Self.МАГАЗИН" Multiplicity="0..1" />
+          <End Role="СОТРУДНИК" Type="Self.СОТРУДНИК" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="МАГАЗИН">
+              <PropertyRef Name="ИдентификаторМагазина" />
+            </Principal>
+            <Dependent Role="СОТРУДНИК">
+              <PropertyRef Name="ИдентификаторМагазина" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ЭЛЕМЕНТ_П__Идент__440B1D61">
+          <End Role="ПРОДАЖА" Type="Self.ПРОДАЖА" Multiplicity="0..1" />
+          <End Role="ЭЛЕМЕНТ_ПРОДАЖИ" Type="Self.ЭЛЕМЕНТ_ПРОДАЖИ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ПРОДАЖА">
+              <PropertyRef Name="ИдентификаторПродажи" />
+            </Principal>
+            <Dependent Role="ЭЛЕМЕНТ_ПРОДАЖИ">
+              <PropertyRef Name="ИдентификаторПродажи" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ЭЛЕМЕНТ_П__Идент__44FF419A">
+          <End Role="ПРОДУКТ" Type="Self.ПРОДУКТ" Multiplicity="0..1" />
+          <End Role="ЭЛЕМЕНТ_ПРОДАЖИ" Type="Self.ЭЛЕМЕНТ_ПРОДАЖИ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ПРОДУКТ">
+              <PropertyRef Name="ИдентификаторПродукта" />
+            </Principal>
+            <Dependent Role="ЭЛЕМЕНТ_ПРОДАЖИ">
+              <PropertyRef Name="ИдентификаторПродукта" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище ShoppingCenterModelContainer">
+          <EntitySet Name="МАГАЗИН" EntityType="Self.МАГАЗИН" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ПОКУПАТЕЛЬ" EntityType="Self.ПОКУПАТЕЛЬ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ПРОДАЖА" EntityType="Self.ПРОДАЖА" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ПРОДУКТ" EntityType="Self.ПРОДУКТ" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="СОТРУДНИК" EntityType="Self.СОТРУДНИК" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ЭЛЕМЕНТ_ПРОДАЖИ" EntityType="Self.ЭЛЕМЕНТ_ПРОДАЖИ" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ПРОДАЖА__Идентиф__412EB0B6" Association="Self.FK__ПРОДАЖА__Идентиф__412EB0B6">
+            <End Role="ПОКУПАТЕЛЬ" EntitySet="ПОКУПАТЕЛЬ" />
+            <End Role="ПРОДАЖА" EntitySet="ПРОДАЖА" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ПРОДУКТ__Идентиф__3E52440B" Association="Self.FK__ПРОДУКТ__Идентиф__3E52440B">
+            <End Role="МАГАЗИН" EntitySet="МАГАЗИН" />
+            <End Role="ПРОДУКТ" EntitySet="ПРОДУКТ" />
+          </AssociationSet>
+          <AssociationSet Name="FK__СОТРУДНИК__Идент__3B75D760" Association="Self.FK__СОТРУДНИК__Идент__3B75D760">
+            <End Role="МАГАЗИН" EntitySet="МАГАЗИН" />
+            <End Role="СОТРУДНИК" EntitySet="СОТРУДНИК" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ЭЛЕМЕНТ_П__Идент__440B1D61" Association="Self.FK__ЭЛЕМЕНТ_П__Идент__440B1D61">
+            <End Role="ПРОДАЖА" EntitySet="ПРОДАЖА" />
+            <End Role="ЭЛЕМЕНТ_ПРОДАЖИ" EntitySet="ЭЛЕМЕНТ_ПРОДАЖИ" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ЭЛЕМЕНТ_П__Идент__44FF419A" Association="Self.FK__ЭЛЕМЕНТ_П__Идент__44FF419A">
+            <End Role="ПРОДУКТ" EntitySet="ПРОДУКТ" />
+            <End Role="ЭЛЕМЕНТ_ПРОДАЖИ" EntitySet="ЭЛЕМЕНТ_ПРОДАЖИ" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ShoppingCenterModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="МАГАЗИН">
+          <Key>
+            <PropertyRef Name="ИдентификаторМагазина" />
+          </Key>
+          <Property Name="ИдентификаторМагазина" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="НазваниеМагазина" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="КатегорияМагазина" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Местоположение" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ПРОДУКТ" Relationship="Self.FK__ПРОДУКТ__Идентиф__3E52440B" FromRole="МАГАЗИН" ToRole="ПРОДУКТ" />
+          <NavigationProperty Name="СОТРУДНИК" Relationship="Self.FK__СОТРУДНИК__Идент__3B75D760" FromRole="МАГАЗИН" ToRole="СОТРУДНИК" />
+        </EntityType>
+        <EntityType Name="ПОКУПАТЕЛЬ">
+          <Key>
+            <PropertyRef Name="ИдентификаторПокупателя" />
+          </Key>
+          <Property Name="ИдентификаторПокупателя" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Имя" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ЭлектроннаяПочта" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Телефон" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="ПРОДАЖА" Relationship="Self.FK__ПРОДАЖА__Идентиф__412EB0B6" FromRole="ПОКУПАТЕЛЬ" ToRole="ПРОДАЖА" />
+        </EntityType>
+        <EntityType Name="ПРОДАЖА">
+          <Key>
+            <PropertyRef Name="ИдентификаторПродажи" />
+          </Key>
+          <Property Name="ИдентификаторПродажи" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ИдентификаторПокупателя" Type="Int32" />
+          <Property Name="ДатаПродажи" Type="DateTime" Precision="0" />
+          <Property Name="ОбщаяСумма" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="ПОКУПАТЕЛЬ" Relationship="Self.FK__ПРОДАЖА__Идентиф__412EB0B6" FromRole="ПРОДАЖА" ToRole="ПОКУПАТЕЛЬ" />
+          <NavigationProperty Name="ЭЛЕМЕНТ_ПРОДАЖИ" Relationship="Self.FK__ЭЛЕМЕНТ_П__Идент__440B1D61" FromRole="ПРОДАЖА" ToRole="ЭЛЕМЕНТ_ПРОДАЖИ" />
+        </EntityType>
+        <EntityType Name="ПРОДУКТ">
+          <Key>
+            <PropertyRef Name="ИдентификаторПродукта" />
+          </Key>
+          <Property Name="ИдентификаторПродукта" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="НазваниеПродукта" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Цена" Type="Decimal" Precision="10" Scale="2" />
+          <Property Name="ИдентификаторМагазина" Type="Int32" />
+          <NavigationProperty Name="МАГАЗИН" Relationship="Self.FK__ПРОДУКТ__Идентиф__3E52440B" FromRole="ПРОДУКТ" ToRole="МАГАЗИН" />
+          <NavigationProperty Name="ЭЛЕМЕНТ_ПРОДАЖИ" Relationship="Self.FK__ЭЛЕМЕНТ_П__Идент__44FF419A" FromRole="ПРОДУКТ" ToRole="ЭЛЕМЕНТ_ПРОДАЖИ" />
+        </EntityType>
+        <EntityType Name="СОТРУДНИК">
+          <Key>
+            <PropertyRef Name="ИдентификаторСотрудника" />
+          </Key>
+          <Property Name="ИдентификаторСотрудника" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Имя" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Фамилия" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="ИдентификаторМагазина" Type="Int32" />
+          <Property Name="Должность" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="МАГАЗИН" Relationship="Self.FK__СОТРУДНИК__Идент__3B75D760" FromRole="СОТРУДНИК" ToRole="МАГАЗИН" />
+        </EntityType>
+        <EntityType Name="ЭЛЕМЕНТ_ПРОДАЖИ">
+          <Key>
+            <PropertyRef Name="ИдентификаторЭлементаПродажи" />
+          </Key>
+          <Property Name="ИдентификаторЭлементаПродажи" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ИдентификаторПродажи" Type="Int32" />
+          <Property Name="ИдентификаторПродукта" Type="Int32" />
+          <Property Name="Количество" Type="Int32" />
+          <Property Name="СуммаПозиции" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="ПРОДАЖА" Relationship="Self.FK__ЭЛЕМЕНТ_П__Идент__440B1D61" FromRole="ЭЛЕМЕНТ_ПРОДАЖИ" ToRole="ПРОДАЖА" />
+          <NavigationProperty Name="ПРОДУКТ" Relationship="Self.FK__ЭЛЕМЕНТ_П__Идент__44FF419A" FromRole="ЭЛЕМЕНТ_ПРОДАЖИ" ToRole="ПРОДУКТ" />
+        </EntityType>
+        <Association Name="FK__ПРОДУКТ__Идентиф__3E52440B">
+          <End Role="МАГАЗИН" Type="Self.МАГАЗИН" Multiplicity="0..1" />
+          <End Role="ПРОДУКТ" Type="Self.ПРОДУКТ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="МАГАЗИН">
+              <PropertyRef Name="ИдентификаторМагазина" />
+            </Principal>
+            <Dependent Role="ПРОДУКТ">
+              <PropertyRef Name="ИдентификаторМагазина" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__СОТРУДНИК__Идент__3B75D760">
+          <End Role="МАГАЗИН" Type="Self.МАГАЗИН" Multiplicity="0..1" />
+          <End Role="СОТРУДНИК" Type="Self.СОТРУДНИК" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="МАГАЗИН">
+              <PropertyRef Name="ИдентификаторМагазина" />
+            </Principal>
+            <Dependent Role="СОТРУДНИК">
+              <PropertyRef Name="ИдентификаторМагазина" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ПРОДАЖА__Идентиф__412EB0B6">
+          <End Role="ПОКУПАТЕЛЬ" Type="Self.ПОКУПАТЕЛЬ" Multiplicity="0..1" />
+          <End Role="ПРОДАЖА" Type="Self.ПРОДАЖА" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ПОКУПАТЕЛЬ">
+              <PropertyRef Name="ИдентификаторПокупателя" />
+            </Principal>
+            <Dependent Role="ПРОДАЖА">
+              <PropertyRef Name="ИдентификаторПокупателя" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ЭЛЕМЕНТ_П__Идент__440B1D61">
+          <End Role="ПРОДАЖА" Type="Self.ПРОДАЖА" Multiplicity="0..1" />
+          <End Role="ЭЛЕМЕНТ_ПРОДАЖИ" Type="Self.ЭЛЕМЕНТ_ПРОДАЖИ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ПРОДАЖА">
+              <PropertyRef Name="ИдентификаторПродажи" />
+            </Principal>
+            <Dependent Role="ЭЛЕМЕНТ_ПРОДАЖИ">
+              <PropertyRef Name="ИдентификаторПродажи" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ЭЛЕМЕНТ_П__Идент__44FF419A">
+          <End Role="ПРОДУКТ" Type="Self.ПРОДУКТ" Multiplicity="0..1" />
+          <End Role="ЭЛЕМЕНТ_ПРОДАЖИ" Type="Self.ЭЛЕМЕНТ_ПРОДАЖИ" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ПРОДУКТ">
+              <PropertyRef Name="ИдентификаторПродукта" />
+            </Principal>
+            <Dependent Role="ЭЛЕМЕНТ_ПРОДАЖИ">
+              <PropertyRef Name="ИдентификаторПродукта" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ShoppingCenterEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="МАГАЗИН" EntityType="Self.МАГАЗИН" />
+          <EntitySet Name="ПОКУПАТЕЛЬ" EntityType="Self.ПОКУПАТЕЛЬ" />
+          <EntitySet Name="ПРОДАЖА" EntityType="Self.ПРОДАЖА" />
+          <EntitySet Name="ПРОДУКТ" EntityType="Self.ПРОДУКТ" />
+          <EntitySet Name="СОТРУДНИК" EntityType="Self.СОТРУДНИК" />
+          <EntitySet Name="ЭЛЕМЕНТ_ПРОДАЖИ" EntityType="Self.ЭЛЕМЕНТ_ПРОДАЖИ" />
+          <AssociationSet Name="FK__ПРОДУКТ__Идентиф__3E52440B" Association="Self.FK__ПРОДУКТ__Идентиф__3E52440B">
+            <End Role="МАГАЗИН" EntitySet="МАГАЗИН" />
+            <End Role="ПРОДУКТ" EntitySet="ПРОДУКТ" />
+          </AssociationSet>
+          <AssociationSet Name="FK__СОТРУДНИК__Идент__3B75D760" Association="Self.FK__СОТРУДНИК__Идент__3B75D760">
+            <End Role="МАГАЗИН" EntitySet="МАГАЗИН" />
+            <End Role="СОТРУДНИК" EntitySet="СОТРУДНИК" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ПРОДАЖА__Идентиф__412EB0B6" Association="Self.FK__ПРОДАЖА__Идентиф__412EB0B6">
+            <End Role="ПОКУПАТЕЛЬ" EntitySet="ПОКУПАТЕЛЬ" />
+            <End Role="ПРОДАЖА" EntitySet="ПРОДАЖА" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ЭЛЕМЕНТ_П__Идент__440B1D61" Association="Self.FK__ЭЛЕМЕНТ_П__Идент__440B1D61">
+            <End Role="ПРОДАЖА" EntitySet="ПРОДАЖА" />
+            <End Role="ЭЛЕМЕНТ_ПРОДАЖИ" EntitySet="ЭЛЕМЕНТ_ПРОДАЖИ" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ЭЛЕМЕНТ_П__Идент__44FF419A" Association="Self.FK__ЭЛЕМЕНТ_П__Идент__44FF419A">
+            <End Role="ПРОДУКТ" EntitySet="ПРОДУКТ" />
+            <End Role="ЭЛЕМЕНТ_ПРОДАЖИ" EntitySet="ЭЛЕМЕНТ_ПРОДАЖИ" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище ShoppingCenterModelContainer" CdmEntityContainer="ShoppingCenterEntities">
+          <EntitySetMapping Name="МАГАЗИН">
+            <EntityTypeMapping TypeName="ShoppingCenterModel.МАГАЗИН">
+              <MappingFragment StoreEntitySet="МАГАЗИН">
+                <ScalarProperty Name="ИдентификаторМагазина" ColumnName="ИдентификаторМагазина" />
+                <ScalarProperty Name="НазваниеМагазина" ColumnName="НазваниеМагазина" />
+                <ScalarProperty Name="КатегорияМагазина" ColumnName="КатегорияМагазина" />
+                <ScalarProperty Name="Местоположение" ColumnName="Местоположение" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ПОКУПАТЕЛЬ">
+            <EntityTypeMapping TypeName="ShoppingCenterModel.ПОКУПАТЕЛЬ">
+              <MappingFragment StoreEntitySet="ПОКУПАТЕЛЬ">
+                <ScalarProperty Name="ИдентификаторПокупателя" ColumnName="ИдентификаторПокупателя" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="ЭлектроннаяПочта" ColumnName="ЭлектроннаяПочта" />
+                <ScalarProperty Name="Телефон" ColumnName="Телефон" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ПРОДАЖА">
+            <EntityTypeMapping TypeName="ShoppingCenterModel.ПРОДАЖА">
+              <MappingFragment StoreEntitySet="ПРОДАЖА">
+                <ScalarProperty Name="ИдентификаторПродажи" ColumnName="ИдентификаторПродажи" />
+                <ScalarProperty Name="ИдентификаторПокупателя" ColumnName="ИдентификаторПокупателя" />
+                <ScalarProperty Name="ДатаПродажи" ColumnName="ДатаПродажи" />
+                <ScalarProperty Name="ОбщаяСумма" ColumnName="ОбщаяСумма" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ПРОДУКТ">
+            <EntityTypeMapping TypeName="ShoppingCenterModel.ПРОДУКТ">
+              <MappingFragment StoreEntitySet="ПРОДУКТ">
+                <ScalarProperty Name="ИдентификаторПродукта" ColumnName="ИдентификаторПродукта" />
+                <ScalarProperty Name="НазваниеПродукта" ColumnName="НазваниеПродукта" />
+                <ScalarProperty Name="Цена" ColumnName="Цена" />
+                <ScalarProperty Name="ИдентификаторМагазина" ColumnName="ИдентификаторМагазина" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="СОТРУДНИК">
+            <EntityTypeMapping TypeName="ShoppingCenterModel.СОТРУДНИК">
+              <MappingFragment StoreEntitySet="СОТРУДНИК">
+                <ScalarProperty Name="ИдентификаторСотрудника" ColumnName="ИдентификаторСотрудника" />
+                <ScalarProperty Name="Имя" ColumnName="Имя" />
+                <ScalarProperty Name="Фамилия" ColumnName="Фамилия" />
+                <ScalarProperty Name="ИдентификаторМагазина" ColumnName="ИдентификаторМагазина" />
+                <ScalarProperty Name="Должность" ColumnName="Должность" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ЭЛЕМЕНТ_ПРОДАЖИ">
+            <EntityTypeMapping TypeName="ShoppingCenterModel.ЭЛЕМЕНТ_ПРОДАЖИ">
+              <MappingFragment StoreEntitySet="ЭЛЕМЕНТ_ПРОДАЖИ">
+                <ScalarProperty Name="ИдентификаторЭлементаПродажи" ColumnName="ИдентификаторЭлементаПродажи" />
+                <ScalarProperty Name="ИдентификаторПродажи" ColumnName="ИдентификаторПродажи" />
+                <ScalarProperty Name="ИдентификаторПродукта" ColumnName="ИдентификаторПродукта" />
+                <ScalarProperty Name="Количество" ColumnName="Количество" />
+                <ScalarProperty Name="СуммаПозиции" ColumnName="СуммаПозиции" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

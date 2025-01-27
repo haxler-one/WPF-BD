@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="2afd4c0572a14de3a6400443dd6c6c9b" Name="Diagram1">
+        <EntityTypeShape EntityType="ShoppingCenterModel.МАГАЗИН" Width="1.5" PointX="1.75" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCenterModel.ПОКУПАТЕЛЬ" Width="1.5" PointX="2.875" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCenterModel.ПРОДАЖА" Width="1.5" PointX="5" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCenterModel.ПРОДУКТ" Width="1.5" PointX="4.625" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCenterModel.СОТРУДНИК" Width="1.5" PointX="8" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="ShoppingCenterModel.ЭЛЕМЕНТ_ПРОДАЖИ" Width="1.5" PointX="9.125" PointY="1" IsExpanded="true" />
+        <AssociationConnector Association="ShoppingCenterModel.FK__ПРОДУКТ__Идентиф__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingCenterModel.FK__СОТРУДНИК__Идент__3B75D760" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingCenterModel.FK__ПРОДАЖА__Идентиф__412EB0B6" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingCenterModel.FK__ЭЛЕМЕНТ_П__Идент__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="ShoppingCenterModel.FK__ЭЛЕМЕНТ_П__Идент__44FF419A" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
