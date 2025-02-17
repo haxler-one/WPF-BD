@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 
@@ -7,10 +9,48 @@ namespace WPF_BD
     public partial class MainWindow : Window
     {
         private static List<User> Users = new List<User>();
+        private const string UsersFilePath = "users.txt"; // Имя файла
 
         public MainWindow()
         {
             InitializeComponent();
+            LoadUsersFromFile(); // Загружаем данные при запуске
+        }
+
+        private void LoadUsersFromFile()
+        {
+            if (File.Exists(UsersFilePath))
+            {
+                try
+                {
+                    string[] lines = File.ReadAllLines(UsersFilePath);
+                    foreach (string line in lines)
+                    {
+                        string[] parts = line.Split(',');
+                        if (parts.Length == 3)
+                        {
+                            Users.Add(new User { Username = parts[0], PasswordHash = parts[1], Salt = parts[2] });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке данных: {ex.Message}");
+                }
+            }
+        }
+
+        private void SaveUsersToFile()
+        {
+            try
+            {
+                List<string> lines = Users.Select(u => $"{u.Username},{u.PasswordHash},{u.Salt}").ToList();
+                File.WriteAllLines(UsersFilePath, lines);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при сохранении данных: {ex.Message}");
+            }
         }
 
         private void RegisterButton_Click(object sender, RoutedEventArgs e)
@@ -35,6 +75,7 @@ namespace WPF_BD
 
             User newUser = new User { Username = username, PasswordHash = passwordHash, Salt = salt };
             Users.Add(newUser);
+            SaveUsersToFile(); // Сохраняем после регистрации
 
             MessageBox.Show("Регистрация прошла успешно.");
         }
@@ -68,6 +109,13 @@ namespace WPF_BD
             {
                 MessageBox.Show("Неверное имя пользователя или пароль.");
             }
+        }
+
+        // Сохраняем данные при закрытии приложения
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            SaveUsersToFile();
+            base.OnClosing(e);
         }
     }
 }
